@@ -1,50 +1,66 @@
+/**
+ * @class PiepsSignalsClass
+ * @classdesc A simple signal system that allows creating, connecting, disconnecting, deleting, and emitting signals.
+ */
 class PiepsSignalsClass {
+    /**
+     * @constructor
+     * @description Creates a new instance of PiepsSignalsClass.
+     */
     constructor() {
+        /**
+         * @private
+         * @type {Map<string, function[]>}
+         * @description Stores the signals and their associated callbacks.
+         */
         this.SignalContainer = new Map();
     };
 
     /**
-     * Creates and registers a new signal.
-     * If the signal already exists, it will be overwritten.
+     * @method createSignal
+     * @description Creates and registers a new signal.
      * @param {string} signalName - The unique name of the signal.
      */
     createSignal(signalName) {
-        const customSignal = (callback) => callback;
-        this.SignalContainer.set(signalName, customSignal);
+        this.SignalContainer.set(signalName, []); // Array for callbacks
     };
 
     /**
-     * Connects a callback function to a registered signal.
-     * The callback function will be executed when the signal is emitted.
-     * Only one callback can be assigned per signal; existing callbacks will be replaced.
-     * @param {string} signalName - The name of the signal to connect to.
+     * @method connectSignal
+     * @description Connects a callback function to a registered signal.
+     * @param {string} signalName - The name of the signal to connect the callback function to.
      * @param {function} callback - The function to execute when the signal is emitted.
      * @throws {Error} If the signal does not exist.
      */
     connectSignal(signalName, callback) {
         if (this.SignalContainer.has(signalName)) {
-            let signal = this.SignalContainer.get(signalName);
-            this.SignalContainer.set(signalName, signal(callback));
+            this.SignalContainer.get(signalName).push(callback);
         } else {
             console.warn(new Error(`Signal "${signalName}" not found in storage!`));
         };
     };
 
     /**
-     * Dissconnect a signal from given callback.
-     * @param {string} signalName - The name of the signal to disconnect.
+     * @method disconnectSignal
+     * @description Disconnects a callback function from a signal.
+     * @param {string} signalName - The name of the signal to disconnect the callback function from.
+     * @param {function} callbackToRemove - The callback function to disconnect.
+     * @throws {Error} If the signal does not exist.
      */
-    dissconnectSignal(signalName) {
+    disconnectSignal(signalName, callbackToRemove) {
         if (this.SignalContainer.has(signalName)) {
-            this.SignalContainer.set(signalName, null);
+            const callbacks = this.SignalContainer.get(signalName);
+            this.SignalContainer.set(signalName, callbacks.filter(callback => callback !== callbackToRemove));
         } else {
             console.warn(new Error(`Signal "${signalName}" not found in storage!`));
         };
     };
 
     /**
-     * Delets a Signal from Signal System.
+     * @method deleteSignal
+     * @description Deletes a signal from the signal system.
      * @param {string} signalName - The name of the signal to delete.
+     * @throws {Error} If the signal does not exist.
      */
     deleteSignal(signalName) {
         if (this.SignalContainer.has(signalName)) {
@@ -55,25 +71,26 @@ class PiepsSignalsClass {
     };
 
     /**
-     * Emits a signal and executes the connected callback function.
-     * Additional arguments can be passed to the callback function.
+     * @method emitSignal
+     * @description Emits a signal and executes the connected callback functions.
      * @param {string} signalName - The name of the signal to emit.
-     * @param {...any} args - Arguments to pass to the connected callback function.
-     * @throws {Error} If the signal does not exist or has no assigned callback.
+     * @param {...any} args - Additional arguments to pass to the callback functions.
+     * @throws {Error} If the signal does not exist.
      */
     emitSignal(signalName, ...args) {
         if (this.SignalContainer.has(signalName)) {
-            let signal = this.SignalContainer.get(signalName);
-            if (typeof signal === "function") {
-                signal(...args);
-            } else {
-                console.warn(new Error(`Signal "${signalName}" has no assigned callback!`));
-            };
+            const callbacks = this.SignalContainer.get(signalName);
+            callbacks.forEach(callback => callback(...args));
         } else {
             console.warn(new Error(`Signal "${signalName}" not found in storage!`));
         };
     };
 };
 
+/**
+ * @type {PiepsSignalsClass}
+ * @description An instance of PiepsSignalsClass used as a singleton.
+ */
 const PiepsSignals = new PiepsSignalsClass();
+
 export default PiepsSignals;
