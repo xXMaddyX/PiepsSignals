@@ -1,4 +1,4 @@
-import PiepsSignals from "./PipesSignals.js";
+import PiepsSignals from "./PiepsSignals.js";
 
 // Example Usage:
 
