@@ -1,26 +1,113 @@
-# PiepsSignals Class
+# PiepsSignals
 
-The **PiepsSignalsClass** is a utility for creating, managing, and emitting custom signals in JavaScript applications. This allows you to set up event-driven architectures with minimal overhead and a straightforward API.
+A simple signal system for JavaScript that allows creating, connecting, disconnecting, deleting, and emitting signals.
 
----
+## Introduction
 
-## Overview
+PiepsSignals provides a straightforward way to implement a signal/slot pattern in your JavaScript applications. It's designed to be lightweight and easy to use, making it ideal for managing events and communication between different parts of your code.
 
-An instance of `PiepsSignalsClass` maintains a registry of signals (referred to as `SignalContainer`) using a `Map`. Each signal can have at most one connected callback, which will be triggered when the signal is emitted. This class provides methods to:
+## Installation
 
-1. **Create a new signal** (`createSignal`)
-2. **Connect a callback** to a signal (`connectSignal`)
-3. **Disconnect** a signal’s callback (`dissconnectSignal`)
-4. **Delete** a signal entirely (`deleteSignal`)
-5. **Emit** a signal (`emitSignal`)
+Since this is a single file module, you can directly import it into your project. If you are using npm or yarn you can also create a simple wrapper around it.
 
-This approach makes it easy to separate various concerns in your application, allowing different parts of your code to stay decoupled and only react to relevant events.
+For example, if you are using npm:
 
----
+1.  Create a file named `pieps-signals.js` and paste the code into it.
+2.  In your project, you can import it like this:
 
-## Usage
+```javascript
+import PiepsSignals from './pieps-signals.js';
 
-### 1. Import and Initialization
+Usage
+Creating a Signal
+Use the createSignal method to create a new signal.
 
-```js
-import PiepsSignals from './path/to/PiepsSignals';
+JavaScript
+
+PiepsSignals.createSignal('myDataChanged');
+Connecting a Callback
+Use the connectSignal method to connect a callback function to a signal.
+
+JavaScript
+
+function handleDataChange(newData) {
+  console.log('Data changed:', newData);
+}
+
+PiepsSignals.connectSignal('myDataChanged', handleDataChange);
+Emitting a Signal
+Use the emitSignal method to emit a signal and trigger the connected callbacks.
+
+JavaScript
+
+PiepsSignals.emitSignal('myDataChanged', { value: 42 });
+Disconnecting a Callback
+Use the disconnectSignal method to disconnect a callback function from a signal.
+
+JavaScript
+
+PiepsSignals.disconnectSignal('myDataChanged', handleDataChange);
+Deleting a Signal
+Use the deleteSignal method to delete a signal.
+
+JavaScript
+
+PiepsSignals.deleteSignal('myDataChanged');
+API
+PiepsSignals
+A singleton instance of the PiepsSignalsClass.
+
+PiepsSignalsClass
+constructor()
+Creates a new instance of PiepsSignalsClass.
+
+createSignal(signalName)
+Creates and registers a new signal.
+
+signalName (string): The unique name of the signal.
+connectSignal(signalName, callback)
+Connects a callback function to a registered signal.
+
+signalName (string): The name of the signal to connect the callback function to.
+callback (function): The function to execute when the signal is emitted.
+Throws: Error if the signal does not exist.
+disconnectSignal(signalName, callbackToRemove)
+Disconnects a callback function from a signal.
+
+signalName (string): The name of the signal to disconnect the callback function from.
+callbackToRemove (function): The callback function to disconnect.
+Throws: Error if the signal does not exist.
+deleteSignal(signalName)
+Deletes a signal from the signal system.
+
+signalName (string): The name of the signal to delete.
+Throws: Error if the signal does not exist.
+emitSignal(signalName, ...args)
+Emits a signal and executes the connected callback functions.
+
+signalName (string): The name of the signal to emit.
+...args (any): Additional arguments to pass to the callback functions.
+Throws: Error if the signal does not exist.
+Example
+JavaScript
+
+import PiepsSignals from './pieps-signals.js';
+
+PiepsSignals.createSignal('userLoggedIn');
+
+function handleLogin(username) {
+  console.log(`User logged in: ${username}`);
+}
+
+PiepsSignals.connectSignal('userLoggedIn', handleLogin);
+
+PiepsSignals.emitSignal('userLoggedIn', 'JohnDoe');
+
+PiepsSignals.disconnectSignal('userLoggedIn', handleLogin);
+
+PiepsSignals.emitSignal('userLoggedIn', 'JaneDoe'); // Will not trigger handleLogin
+Contributing
+Contributions are welcome! Feel free to submit pull requests or open issues.
+
+License
+This project is licensed under the MIT 1  License.   
