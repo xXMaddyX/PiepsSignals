@@ -23,45 +23,45 @@ import PiepsSignals from './pieps-signals.js';
 Creating a Signal
 Use the createSignal method to create a new signal.
 
-´´´javascript
+```javascript
 PiepsSignals.createSignal('myDataChanged');
-´´´
+```
 
 ## Connecting a Callback
 Use the connectSignal method to connect a callback function to a signal.
 
-´´´javascript
+```javascript
 function handleDataChange(newData) {
   console.log('Data changed:', newData);
 }
 
 PiepsSignals.connectSignal('myDataChanged', handleDataChange);
-´´´
+```
 
 ## Emitting a Signal
 Use the emitSignal method to emit a signal and trigger the connected callbacks.
 
-´´´javascript
+```javascript
 PiepsSignals.disconnectSignal('myDataChanged', handleDataChange);
-´´´
+```
 
 ## Disconnecting a Callback
 Use the disconnectSignal method to disconnect a callback function from a signal.
 
-´´´javascript
+```javascript
 PiepsSignals.disconnectSignal('myDataChanged', handleDataChange);
-´´´
+```
 
 ## Deleting a Signal
 Use the deleteSignal method to delete a signal.
 
-´´´javascript
+```javascript
 PiepsSignals.deleteSignal('myDataChanged');
-´´´
+```
 
 # Example
 
-´´´javascript
+```javascript
 import PiepsSignals from './pieps-signals.js';
 
 PiepsSignals.createSignal('userLoggedIn');
@@ -77,7 +77,7 @@ PiepsSignals.emitSignal('userLoggedIn', 'JohnDoe');
 PiepsSignals.disconnectSignal('userLoggedIn', handleLogin);
 
 PiepsSignals.emitSignal('userLoggedIn', 'JaneDoe'); // Will not trigger handleLogin
-´´´
+```
 
 # Contributing
 Contributions are welcome! Feel free to submit pull requests or open issues.
