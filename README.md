@@ -17,80 +17,51 @@ For example, if you are using npm:
 
 ```javascript
 import PiepsSignals from './pieps-signals.js';
+```
 
-Usage
+# Usage
 Creating a Signal
 Use the createSignal method to create a new signal.
 
-JavaScript
-
+´´´javascript
 PiepsSignals.createSignal('myDataChanged');
-Connecting a Callback
+´´´
+
+## Connecting a Callback
 Use the connectSignal method to connect a callback function to a signal.
 
-JavaScript
-
+´´´javascript
 function handleDataChange(newData) {
   console.log('Data changed:', newData);
 }
 
 PiepsSignals.connectSignal('myDataChanged', handleDataChange);
-Emitting a Signal
+´´´
+
+## Emitting a Signal
 Use the emitSignal method to emit a signal and trigger the connected callbacks.
 
-JavaScript
+´´´javascript
+PiepsSignals.disconnectSignal('myDataChanged', handleDataChange);
+´´´
 
-PiepsSignals.emitSignal('myDataChanged', { value: 42 });
-Disconnecting a Callback
+## Disconnecting a Callback
 Use the disconnectSignal method to disconnect a callback function from a signal.
 
-JavaScript
-
+´´´javascript
 PiepsSignals.disconnectSignal('myDataChanged', handleDataChange);
-Deleting a Signal
+´´´
+
+## Deleting a Signal
 Use the deleteSignal method to delete a signal.
 
-JavaScript
-
+´´´javascript
 PiepsSignals.deleteSignal('myDataChanged');
-API
-PiepsSignals
-A singleton instance of the PiepsSignalsClass.
+´´´
 
-PiepsSignalsClass
-constructor()
-Creates a new instance of PiepsSignalsClass.
+# Example
 
-createSignal(signalName)
-Creates and registers a new signal.
-
-signalName (string): The unique name of the signal.
-connectSignal(signalName, callback)
-Connects a callback function to a registered signal.
-
-signalName (string): The name of the signal to connect the callback function to.
-callback (function): The function to execute when the signal is emitted.
-Throws: Error if the signal does not exist.
-disconnectSignal(signalName, callbackToRemove)
-Disconnects a callback function from a signal.
-
-signalName (string): The name of the signal to disconnect the callback function from.
-callbackToRemove (function): The callback function to disconnect.
-Throws: Error if the signal does not exist.
-deleteSignal(signalName)
-Deletes a signal from the signal system.
-
-signalName (string): The name of the signal to delete.
-Throws: Error if the signal does not exist.
-emitSignal(signalName, ...args)
-Emits a signal and executes the connected callback functions.
-
-signalName (string): The name of the signal to emit.
-...args (any): Additional arguments to pass to the callback functions.
-Throws: Error if the signal does not exist.
-Example
-JavaScript
-
+´´´javascript
 import PiepsSignals from './pieps-signals.js';
 
 PiepsSignals.createSignal('userLoggedIn');
@@ -106,8 +77,10 @@ PiepsSignals.emitSignal('userLoggedIn', 'JohnDoe');
 PiepsSignals.disconnectSignal('userLoggedIn', handleLogin);
 
 PiepsSignals.emitSignal('userLoggedIn', 'JaneDoe'); // Will not trigger handleLogin
-Contributing
+´´´
+
+# Contributing
 Contributions are welcome! Feel free to submit pull requests or open issues.
 
-License
-This project is licensed under the MIT 1  License.   
+# License
+This project is licensed under the MIT 1  License.
