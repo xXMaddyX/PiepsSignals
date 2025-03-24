@@ -1,5 +1,5 @@
 /**
- * Eine einfache Signal-Systemklasse, die das Erstellen, Verbinden, Trennen, Löschen und Ausgeben von Signalen ermöglicht.
+ * A simple signal system that allows creating, connecting, disconnecting, deleting, and emitting signals.
  */
 class PiepsSignalsClass {
     private SignalContainer: Map<string, ((...args: any[]) => void)[]> = new Map();
