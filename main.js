@@ -24,5 +24,24 @@ PiepsSignals.connectSignal("mathSignal", addNumbers);
 PiepsSignals.emitSignal("messageSignal", "Hello, this is a message!");
 PiepsSignals.emitSignal("mathSignal", 10, 20);
 
-// Attempt to emit a non-existent signal
-PiepsSignals.emitSignal("unknownSignal", "This won't work...");
+// Korrekter Umgang mit nicht existierenden Signalen
+// 1. Prüfe zuerst, ob das Signal existiert oder erstelle es
+if (!PiepsSignals.hasSignal("unknownSignal")) {
+    console.log("Signal 'unknownSignal' does not exist. Creating it first.");
+    PiepsSignals.createSignal("unknownSignal");
+    PiepsSignals.connectSignal("unknownSignal", printMessage);
+}
+// 2. Jetzt kann das Signal sicher emittiert werden
+PiepsSignals.emitSignal("unknownSignal", "This will work now!");
+
+// Beispiel für eine sicherere Methode zum Emittieren eines Signals
+function safeEmit(signalName, ...args) {
+    if (!PiepsSignals.hasSignal(signalName)) {
+        console.log(`Signal '${signalName}' does not exist. Creating it first.`);
+        PiepsSignals.createSignal(signalName);
+    }
+    PiepsSignals.emitSignal(signalName, ...args);
+}
+
+// Teste die safeEmit-Funktion
+safeEmit("anotherSignal", "This signal was created automatically!");

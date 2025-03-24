@@ -13,8 +13,18 @@ class PiepsSignalsClass {
          * @type {Map<string, function[]>}
          * @description Stores the signals and their associated callbacks.
          */
-        this.SignalContainer = new Map();
-    };
+        this._signalContainer = new Map();
+    }
+
+    /**
+     * @method hasSignal
+     * @description Checks if a signal exists.
+     * @param {string} signalName - The name of the signal to check.
+     * @returns {boolean} - True if the signal exists, false otherwise.
+     */
+    hasSignal(signalName) {
+        return this._signalContainer.has(signalName);
+    }
 
     /**
      * @method createSignal
@@ -22,8 +32,12 @@ class PiepsSignalsClass {
      * @param {string} signalName - The unique name of the signal.
      */
     createSignal(signalName) {
-        this.SignalContainer.set(signalName, []); // Array for callbacks
-    };
+        if (this._signalContainer.has(signalName)) {
+            console.warn(new Error(`Signal "${signalName}" already exists!`));
+            return;
+        }
+        this._signalContainer.set(signalName, []); // Array for callbacks
+    }
 
     /**
      * @method connectSignal
@@ -33,12 +47,17 @@ class PiepsSignalsClass {
      * @throws {Error} If the signal does not exist.
      */
     connectSignal(signalName, callback) {
-        if (this.SignalContainer.has(signalName)) {
-            this.SignalContainer.get(signalName).push(callback);
+        if (!callback || typeof callback !== 'function') {
+            console.warn(new Error('Callback must be a function!'));
+            return;
+        }
+        
+        if (this._signalContainer.has(signalName)) {
+            this._signalContainer.get(signalName).push(callback);
         } else {
             console.warn(new Error(`Signal "${signalName}" not found in storage!`));
-        };
-    };
+        }
+    }
 
     /**
      * @method disconnectSignal
@@ -48,13 +67,18 @@ class PiepsSignalsClass {
      * @throws {Error} If the signal does not exist.
      */
     disconnectSignal(signalName, callbackToRemove) {
-        if (this.SignalContainer.has(signalName)) {
-            const callbacks = this.SignalContainer.get(signalName);
-            this.SignalContainer.set(signalName, callbacks.filter(callback => callback !== callbackToRemove));
+        if (!callbackToRemove || typeof callbackToRemove !== 'function') {
+            console.warn(new Error('Callback to remove must be a function!'));
+            return;
+        }
+        
+        if (this._signalContainer.has(signalName)) {
+            const callbacks = this._signalContainer.get(signalName);
+            this._signalContainer.set(signalName, callbacks.filter(callback => callback !== callbackToRemove));
         } else {
             console.warn(new Error(`Signal "${signalName}" not found in storage!`));
-        };
-    };
+        }
+    }
 
     /**
      * @method deleteSignal
@@ -63,12 +87,12 @@ class PiepsSignalsClass {
      * @throws {Error} If the signal does not exist.
      */
     deleteSignal(signalName) {
-        if (this.SignalContainer.has(signalName)) {
-            this.SignalContainer.delete(signalName)
+        if (this._signalContainer.has(signalName)) {
+            this._signalContainer.delete(signalName);
         } else {
             console.warn(new Error(`Signal "${signalName}" not found in storage!`));
-        };
-    };
+        }
+    }
 
     /**
      * @method emitSignal
@@ -78,14 +102,14 @@ class PiepsSignalsClass {
      * @throws {Error} If the signal does not exist.
      */
     emitSignal(signalName, ...args) {
-        if (this.SignalContainer.has(signalName)) {
-            const callbacks = this.SignalContainer.get(signalName);
+        if (this._signalContainer.has(signalName)) {
+            const callbacks = this._signalContainer.get(signalName);
             callbacks.forEach(callback => callback(...args));
         } else {
             console.warn(new Error(`Signal "${signalName}" not found in storage!`));
-        };
-    };
-};
+        }
+    }
+}
 
 /**
  * @type {PiepsSignalsClass}
